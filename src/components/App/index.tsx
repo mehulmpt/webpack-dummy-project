@@ -1,7 +1,7 @@
 import React from "react";
-import Display from "../Display";
-import ButtonPanel from "../ButtonPanel";
-import calculate from "../../logic/calculate";
+import Display from "components/Display";
+import ButtonPanel from "components/ButtonPanel";
+import calculate from "logic/calculate";
 import "./globals.scss";
 
 class App extends React.Component<any, any> {

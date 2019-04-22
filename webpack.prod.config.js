@@ -1,10 +1,10 @@
 const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
-const HTMLWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin')
-const webpack = require('webpack')
+
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
-	mode: 'development',
+	mode: 'production',
 	entry: {
 		myfile: './src/engine.tsx'
 	},
@@ -17,13 +17,8 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, 'build'),
-		filename: 'js/main.[hash].js',
+		filename: 'js/[name].[contenthash].js',
 		publicPath: '/assets/'
-	},
-	devServer: {
-		port: 1234,
-		contentBase: path.join(__dirname, 'dist'),
-		hot: true
 	},
 	module: {
 		rules: [
@@ -40,12 +35,12 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				exclude: /node_modules/,
-				use: ['style-loader', 'css-loader', 'sass-loader']
+				use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
 			},
 			{
 				test: /\.css$/,
 				include: /node_modules/,
-				use: ['style-loader', 'css-loader']
+				use: [MiniCssExtractPlugin.loader, 'css-loader']
 			}
 		]
 	},
@@ -53,14 +48,13 @@ module.exports = {
 		new HTMLWebpackPlugin({
 			title: 'Hello world!',
 			template: './dist/template.html',
-			filename: '../dist/index.html',
 			minify: {
 				collapseWhitespace: true,
 				removeComments: true
-			},
-			alwaysWriteToDisk: true
+			}
 		}),
-		new HTMLWebpackHarddiskPlugin(),
-		new webpack.HotModuleReplacementPlugin()
+		new MiniCssExtractPlugin({
+			filename: `css/[name].css`
+		})
 	]
 }
